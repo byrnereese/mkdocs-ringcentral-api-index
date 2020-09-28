@@ -1,0 +1,18 @@
+site_name: RingCentral API Quick Reference Test
+site_url: https://github.com/byrnereese/mkdocs-ringcentral-api-index
+site_favicon: favicon.ico
+repo_url: https://github.com/byrnereese/mkdocs-ringcentral-api-index
+edit_uri: tree/master/docs
+docs_dir: docs
+
+plugins:
+  - rc-api-index:
+      spec_url: 
+      outfile: docs/quick-reference.md
+  - bootstrap-tables
+
+copyright: "1999-2020 RingCentral, Inc. All rights reserved."
+
+nav:
+- 'Home': 'index.md'
+- 'Quick Reference': 'quick-reference.md'

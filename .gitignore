@@ -1,0 +1,6 @@
+.~
+docs/quick-reference.md
+test.py
+build/*
+dist/*
+*.egg-info/*
