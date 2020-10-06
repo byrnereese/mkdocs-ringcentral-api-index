@@ -98,16 +98,11 @@ class APIIndexPlugin(BasePlugin):
             index[ current ].append( item )
         return index
 
-#    def download_spec(spec_url, spec_file):
-#        r = requests.get(spec_url, allow_redirects=True)
-#        open( spec_file, 'wb').write(r.content)
-       
-    def on_post_build(self, config):
+    def generate_page_contents(self):
         spec_url    = self.config['spec_url']
-        outfile     = self.config['outfile']
         sort_index  = self.config['sort_index']
-        print("Generating API index for spec: " + spec_url)
 
+        print("Generating API index for spec: " + spec_url)
         try:
             uri_parsed = urlparse( spec_url )
             if uri_parsed.scheme in ['https', 'http']:
@@ -123,9 +118,6 @@ class APIIndexPlugin(BasePlugin):
         md = markdown.Markdown()
         env.filters['markdown'] = lambda text: Markup(md.convert(text))
     
-        #stream = open( spec_file, 'r' )
-        #data = load(stream, Loader=Loader)
-
         try:
             data = yaml.safe_load( yaml_data )
         except yaml.YAMLError as e:
@@ -135,6 +127,21 @@ class APIIndexPlugin(BasePlugin):
         index = self.build_api_index( tree, sort_index )
         template = env.get_template('api-index.md.tmpl')
         tmpl_out = template.render( index=index )
-        with open(outfile, "w") as fh:
-            fh.write(tmpl_out)
+        return tmpl_out
+    
+    def on_page_read_source(self, page, config):
+        index_path = os.path.join(config['docs_dir'], self.config['outfile'])
+        page_path = os.path.join(config['docs_dir'], page.file.src_path)
+        if index_path == page_path:
+            contents = self.generate_page_contents()
+            return contents
 
+    '''
+    def on_pre_build(self, config):
+        outfile  = self.config['outfile']
+        contents = self.generate_page_contents()
+        dest = os.path.join(config['docs_dir'], outfile)
+        with open(dest, "w") as fh:
+            fh.write(contents)
+        return config
+    '''

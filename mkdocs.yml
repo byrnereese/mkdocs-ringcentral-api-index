@@ -8,7 +8,7 @@ docs_dir: docs
 plugins:
   - rc-api-index:
       spec_url: 
-      outfile: docs/quick-reference.md
+      outfile: quick-reference.md
   - bootstrap-tables
 
 copyright: "1999-2020 RingCentral, Inc. All rights reserved."
