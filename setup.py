@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='mkdocs-ringcentral-api-index',
-    version='0.1.1',
+    version='0.1.2',
     description='An MkDocs plugin to generate a table of contents page for a swagger specification to make navgating to an API Reference easier.',
     long_description='',
     keywords='mkdocs swagger api documentation',
@@ -32,7 +32,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'mkdocs.plugins': [
-            'rc-api-index = mkdocs_ringcentral_api_index_plugin.plugin:APIIndexPlugin'
+            'ringcentral-api-index = mkdocs_ringcentral_api_index_plugin.plugin:APIIndexPlugin'
         ]
     }
 )
