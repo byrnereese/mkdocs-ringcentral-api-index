@@ -80,9 +80,10 @@ class APIIndexPlugin(BasePlugin):
                         ,'summary':      methods['summary']
                         ,'uri_path':     tag + "/" + opId
                         ,'docs_url':     'https://developers.ringcentral.com/api-reference/' + tag + "/" + opId
-                        ,'description':  methods['description'] if 'description' in methods else ''
+                        ,'description':   methods['description'] if 'description' in methods else ''
                         ,'user_perms':    methods['x-user-permission'] if 'x-user-permission' in methods else ''
                         ,'app_perms':     methods['x-app-permission'] if 'x-app-permission' in methods else ''
+                        ,'throttling_group': methods['x-throttling-group'] if 'x-throttling-group' in methods else ''
                         }
                     api_tree.append( endpoint )
         return sorted( api_tree, key=lambda ops: ops[ sort_index ].capitalize() )
@@ -102,14 +103,14 @@ class APIIndexPlugin(BasePlugin):
         spec_url    = self.config['spec_url']
         sort_index  = self.config['sort_index']
 
-        print("Generating API index for spec: " + spec_url)
+        print("INFO    -  Generating API index for spec: " + spec_url)
         try:
             uri_parsed = urlparse( spec_url )
             if uri_parsed.scheme in ['https', 'http']:
                 url = urlopen( spec_url )
                 yaml_data = url.read()
         except URLError as e:
-            print(e)
+            print("ERROR   -  " + e)
 
         env = Environment(
             loader=FileSystemLoader('tmpl'),
@@ -121,7 +122,7 @@ class APIIndexPlugin(BasePlugin):
         try:
             data = yaml.safe_load( yaml_data )
         except yaml.YAMLError as e:
-            print(e)
+            print("ERROR   -  " + e)
 
         tree = self.build_api_tree( data, sort_index )
         index = self.build_api_index( tree, sort_index )
@@ -129,6 +130,9 @@ class APIIndexPlugin(BasePlugin):
         tmpl_out = template.render( index=index )
         return tmpl_out
     
+    def on_config(self, config):
+        print("INFO    -  api-index plugin ENABLED")
+
     def on_page_read_source(self, page, config):
         index_path = os.path.join(config['docs_dir'], self.config['outfile'])
         page_path = os.path.join(config['docs_dir'], page.file.src_path)
