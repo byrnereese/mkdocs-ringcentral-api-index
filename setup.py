@@ -1,10 +1,14 @@
 from setuptools import setup, find_packages
 
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
+
 setup(
     name='mkdocs-ringcentral-api-index',
     version='0.1.4',
     description='An MkDocs plugin to generate a table of contents page for a swagger specification to make navgating to an API Reference easier.',
-    long_description='',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     keywords='mkdocs swagger api documentation',
     url='https://github.com/byrnereese/mkdocs-ringcentral-api-index',
     author='Byrne Reese',

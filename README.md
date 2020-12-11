@@ -1,6 +1,6 @@
-# mkdocs-minify-plugin
+# mkdocs-ringcentral-api-index
 
-A MkDocs plugin created by RingCentral to assist in the creation of its Mkdocs powered developer guide.
+A MkDocs plugin created by RingCentral to assist in the creation of an API Quick Reference based upon a swagger specification.
 
 At RingCentral we had the desire to publish an API Quick Reference that would make it easier for developers to scan for the endpoint they are looking for and quickly access the documentation for that endpoint in our API Reference. 
 
