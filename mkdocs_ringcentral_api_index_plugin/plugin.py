@@ -62,7 +62,7 @@ class APIIndexPlugin(BasePlugin):
                     if 'parameters' in methods:
                         for param in methods['parameters']:
                             p = {
-                                'name':         param['name']
+                                'name':         param['name'] if 'name' in param else ''
                                 ,'description': param['description'] if 'description' in param else ''
                                 ,'type':        param['type'] if 'type' in param else ''
                                 ,'required':    param['required'] if 'required' in param else 'false'
