@@ -64,10 +64,11 @@ class APIIndexPlugin(BasePlugin):
                             p = {
                                 'name':         param['name'] if 'name' in param else ''
                                 ,'description': param['description'] if 'description' in param else ''
-                                ,'type':        param['type'] if 'type' in param else ''
                                 ,'required':    param['required'] if 'required' in param else 'false'
-                                ,'default':     param['default'] if 'default' in param else ''
                             }
+                            if 'schema' in param:
+                                p['type']    = param['schema']['type'] if 'type' in param['schema'] else ''
+                                p['default'] = param['schema']['default'] if 'default' in param['schema'] else ''
                             params.append( p )
                     endpoint = {
                         'id':            opId
