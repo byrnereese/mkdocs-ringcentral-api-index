@@ -73,7 +73,6 @@ class APIIndexPlugin(BasePlugin):
                     endpoint = {
                         'id':            opId
                         ,'tag':          methods['tags'][0]
-                        ,'availability': methods['x-availability'] if 'x-availability' in methods else 'High'
                         ,'method':       method
                         ,'parameters':   sorted( params, key=lambda ps: ps[ 'name' ].capitalize() )
                         ,'path':         path
@@ -82,6 +81,8 @@ class APIIndexPlugin(BasePlugin):
                         ,'uri_path':     tag + "/" + opId
                         ,'docs_url':     'https://developers.ringcentral.com/api-reference/' + tag + "/" + opId
                         ,'description':   methods['description'] if 'description' in methods else ''
+
+                        ,'availability': methods['x-availability'] if 'x-availability' in methods else 'High'
                         ,'user_perms':    methods['x-user-permission'] if 'x-user-permission' in methods else ''
                         ,'app_perms':     methods['x-app-permission'] if 'x-app-permission' in methods else ''
                         ,'throttling_group': methods['x-throttling-group'] if 'x-throttling-group' in methods else ''

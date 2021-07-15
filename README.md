@@ -1,21 +1,33 @@
 # mkdocs-ringcentral-api-index
 
-A MkDocs plugin created by RingCentral to assist in the creation of an API Quick Reference based upon a swagger specification.
+A MkDocs plugin created by RingCentral to assist in the creation of an API Quick Reference based upon a swagger specification. The output of this plugin can be seen here:
 
-At RingCentral we had the desire to publish an API Quick Reference that would make it easier for developers to scan for the endpoint they are looking for and quickly access the documentation for that endpoint in our API Reference. 
+https://developers.ringcentral.com/guide/basics/api-index
+
+At RingCentral we had the desire to publish an API Quick Reference that would make it easier for developers to scan for the endpoint they are looking for and quickly access the documentation for that endpoint in our API Reference. To solve this problem, we created a plugin that will take as input an OAS 3.0 API specification, and output a markdown file that can rendered within mkdocs. 
+
+The output file can be modified by editing a template file.
+
+*This plugin may not work as expected out-of-the-box for any OAS specification, as it makes use of a number of proprietary OAS elements specific to RingCentral, including:*
+
+* x-availability
+* x-user-permission
+* x-app-permission
+* x-throttling-group
 
 ## Setup
 
 Install the plugin using pip:
 
-`pip install mkdocs-ringcentral-api-index-plugin`
+`pip install mkdocs-ringcentral-api-index`
 
 Activate the plugin in `mkdocs.yml`:
+
 ```yaml
 plugins:
   - search
-  - rc-api-index:
-      spec_url: true
+  - ringcentral-api-index:
+      spec_url: 'https://netstorage.ringcentral.com/dpw/api-reference/specs/rc-platform.yml'
       outfile: 'docs/api-index.md'
 ```
 
