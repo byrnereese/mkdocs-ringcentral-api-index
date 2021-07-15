@@ -33,12 +33,25 @@ plugins:
 
 > **Note:** If you have no `plugins` entry in your config file yet, you'll likely also want to add the `search` plugin. MkDocs enables it by default if there is no `plugins` entry set, but now you have to enable it explicitly.
 
-## Options
+### Options
 
 - `spec_url`: Sets the URL to the Swagger specification for the RingCentral platform. This should default to the official URL. Override this for development purposes only. 
 - `outfile`: The file to output. This file is typically somewhere in your docs folder. 
 
 More information about plugins in the [MkDocs documentation][mkdocs-plugins].
+
+## How the plugin works
+
+This plugin works by generating a markdown file prior to the rest of a mkdocs project being built. In other words, as soon as mkdocs is started, this plugin downloads a spec file, parses it, generates a markdown file, and saves that file into the documentation tree. Then to make the generated page appear in your documentation, you add the file to your `pages` tree. For example:
+
+```yaml
+plugins:
+  - ringcentral-api-index:
+      outfile: api/quick-reference.md
+pages:
+  - 'Home': index.md
+  - 'Quick Reference': api/quick-reference.md
+```
 
 ## See Also
 
