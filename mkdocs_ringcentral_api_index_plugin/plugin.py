@@ -23,15 +23,19 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape, Markup
 import requests
 import markdown
 import json
+import logging
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 from urllib.error import URLError
-    
+
+LOG = logging.getLogger("mkdocs.plugins." + __name__)
+
 class APIIndexPlugin(BasePlugin):
 
     config_scheme = (
         ('do_nothing', mkdocs.config.config_options.Type(str, default='')),
         ('spec_url', config_options.Type(str, default='https://netstorage.ringcentral.com/dpw/api-reference/specs/rc-platform.yml')),
+        ('enabled_if_env', config_options.Type(str, default='ENABLE_API_INDEX')),
         ('sort_index', config_options.Type(str, default='tag')),
         ('outfile', config_options.Type(str, default='docs/quick-reference.md'))
     )
@@ -105,14 +109,14 @@ class APIIndexPlugin(BasePlugin):
         spec_url    = self.config['spec_url']
         sort_index  = self.config['sort_index']
 
-        print("INFO    -  Generating API index for spec: " + spec_url)
+        LOG.info('Generating API index for spec: %s',spec_url)
         try:
             uri_parsed = urlparse( spec_url )
             if uri_parsed.scheme in ['https', 'http']:
                 url = urlopen( spec_url )
                 yaml_data = url.read()
         except URLError as e:
-            print("ERROR   -  " + e)
+            LOG.error("An error occured: %s",e)
 
         env = Environment(
             loader=FileSystemLoader('tmpl'),
@@ -124,7 +128,7 @@ class APIIndexPlugin(BasePlugin):
         try:
             data = yaml.safe_load( yaml_data )
         except yaml.YAMLError as e:
-            print("ERROR   -  " + e)
+            LOG.error("An error occured: %s",e)
 
         tree = self.build_api_tree( data, sort_index )
         index = self.build_api_index( tree, sort_index )
@@ -133,9 +137,19 @@ class APIIndexPlugin(BasePlugin):
         return tmpl_out
     
     def on_config(self, config):
-        print("INFO    -  api-index plugin ENABLED")
+        if 'enabled_if_env' in self.config:
+            env_name = self.config['enabled_if_env']
+            if env_name:
+                self.enabled = os.environ.get(env_name) == '1'
+                if not self.enabled:
+                    LOG.info('api-index plugin DISABLED (set environment variable %s to 1 to enable)',format(env_name))
+                    return
+        LOG.info("api-index plugin ENABLED")
 
     def on_page_read_source(self, page, config):
+        if not self.enabled:
+            return None
+        
         index_path = os.path.join(config['docs_dir'], self.config['outfile'])
         page_path = os.path.join(config['docs_dir'], page.file.src_path)
         if index_path == page_path:
