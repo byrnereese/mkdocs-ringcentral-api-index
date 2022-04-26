@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='mkdocs-ringcentral-api-index',
-    version='0.1.6',
+    version='0.1.7',
     description='An MkDocs plugin to generate a table of contents page for a swagger specification to make navgating to an API Reference easier.',
     long_description=long_description,
     long_description_content_type="text/markdown",

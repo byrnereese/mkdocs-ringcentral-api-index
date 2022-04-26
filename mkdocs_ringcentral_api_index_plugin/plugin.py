@@ -18,7 +18,8 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape, Markup
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2.utils import markupsafe
 
 import requests
 import markdown
@@ -123,7 +124,7 @@ class APIIndexPlugin(BasePlugin):
             autoescape=select_autoescape(['html', 'xml'])
         )
         md = markdown.Markdown()
-        env.filters['markdown'] = lambda text: Markup(md.convert(text))
+        env.filters['markdown'] = lambda text: markupsafe.Markup(md.convert(text))
     
         try:
             data = yaml.safe_load( yaml_data )
